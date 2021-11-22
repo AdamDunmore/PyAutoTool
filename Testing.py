@@ -2,13 +2,23 @@ import keyboard
 import time
 import mouse
 
+
 def check_switch():
-    switch = 0
+
     while 2 > 1:
+        keyboard.wait("esc")
+        switch = 1
+        print(switch)
 
-        if keyboard.read_key("esc"):
-            switch = 1
-            print(switch)
-            continue
+        keyboard.wait("p")
+        switch = 0
+        print(switch)
 
-check_switch()
+
+
+print(check_switch())
+
+while 2 > 1:
+    if check_switch() == 1:
+        print("Yay")
+        time.sleep(1)
