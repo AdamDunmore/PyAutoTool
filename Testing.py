@@ -20,5 +20,5 @@ print(check_switch())
 
 while 2 > 1:
     if check_switch() == 1:
-        print("Yay")
+        print("Ya")
         time.sleep(1)
