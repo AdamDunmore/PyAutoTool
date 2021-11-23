@@ -8,15 +8,15 @@ def check_switch():
     while 2 > 1:
         keyboard.wait("esc")
         switch = 1
-        print(switch)
+        return(switch)
 
         keyboard.wait("p")
         switch = 0
-        print(switch)
+        return(switch)
 
 
 
-print(check_switch())
+switch = check_switch()
 
 while 2 > 1:
     if check_switch() == 1:
