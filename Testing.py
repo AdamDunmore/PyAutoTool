@@ -7,18 +7,16 @@ def check_switch():
 
     while 2 > 1:
         keyboard.wait("esc")
-        switch = 1
-        return(switch)
+        return = 1
 
         keyboard.wait("p")
-        switch = 0
-        return(switch)
+        return = 0
 
 
 
-switch = check_switch()
+if check_switch() == ("1")
 
 while 2 > 1:
-    if check_switch() == 1:
+    if check_switch() == ("1"):
         print("Ya")
         time.sleep(1)
