@@ -1,19 +1,23 @@
-import keyboard
 import time
+import keyboard
 import mouse
 
+start = 0
 
-while 2 > 1:
-    keyboard.wait("esc")
-    switch = 1
-    return(switch)
+def check_start():
+    global start
+    while 2 > 1:
 
-    keyboard.wait("p")
-    switch = 0
-    return(switch)
+        if keyboard.is_pressed("F5") and start == 0:
+           print("On")
+           time.sleep(0.2)
+           start = 1
 
+        if keyboard.is_pressed("F5") and start == 1:
 
-while 2 > 1:
-    if check_switch() == 1:
-        print("Ya")
-        time.sleep(1)
+            print("Off")
+            time.sleep(0.2)
+            start = 0
+
+check_start()
+
