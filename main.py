@@ -1,53 +1,25 @@
+import time
 import keyboard
 import mouse
-import time
 
-mork = input("What would you like to use? Mouse or Keyboard ")
+start = 0
 
+def switch():
+    global start
+    hotkey = input("Enter hotkey")
+    while 2 > 1:
 
-if mork == "Mouse":
+        if keyboard.is_pressed("hotkey") and start == 0:
+           print("On")
+           time.sleep(0.2)
+           start = 1
 
-    hotkey = input("Enter Hotkey ")
-    end_hotkey = input("Enter ending hotkey ")
-    mousestuff = input("Would you like to Right or Left click? ")
-    delay = input("What would you like the delay to be (Number is Seconds) ")
+        if keyboard.is_pressed("hotkey") and start == 1:
 
-    delay = int(delay)
+            print("Off")
+            time.sleep(0.2)
+            start = 0
 
-    if mousestuff == "Right":
-
-        keyboard.wait(hotkey)
-        time.sleep(1)
-
-        while 2 > 1:
-                time.sleep(1)
-                mouse.right_click()
-                print("Complete")
-
-                if keyboard.read_key(end_hotkey):
-                    break
-
-                else:
-                    print("Fail")
-
-    if mousestuff == "Left":
-
-        keyboard.wait(hotkey)
-        ("Issue")
-        time.sleep(1)
-
-        while 2 > 1:
-            mouse.click()
-            print("Complete")
-
-            if keyboard.read_key(end_hotkey):
-                print("break")
-                break
-
-
-    else:
-        print("Invalid Input")
-
-
+switch()
 
 
