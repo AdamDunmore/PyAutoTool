@@ -59,23 +59,12 @@ def switchML():
     start = 0
     hotkey = input("Enter hotkey")
     while 2 > 1:
-
-        if keyboard.is_pressed(hotkey) and start == 0:
-            print("On")
-            start = 1
-            time.sleep(0.2)
-
-        if keyboard.is_pressed(hotkey) and start == 1:
-            print("Off")
-            start = 0
-            time.sleep(0.2)
-
-        if start == 1 and Y == 0:
-            mouse.click(button="left")
-            Y = 1
-            time.sleep(1)
-            Y = 0
-            continue
+        def onoff:
+            global satus
+            status = not status
+            print("On if status else "Off")
+    keyboard.on_press_key(hotkey, onoff)
+    time.sleep(1)
 
 def question():
     global mork
