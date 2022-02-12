@@ -2,97 +2,48 @@ import keyboard
 import mouse
 import time
 
+Mouse = "mouse"
+Keyboard = "keyboard"
 
-def morkkeyboard():
-    writeY = "Yes"
-    writeN = "No"
-    write = input("Would you like to write something? Yes or No ")
+MouseKeyboard = input("Would you like to use Mouse or Keyboard? ")
 
-    if write.lower() == writeY.lower():
-        answer = input("Enter Text ")
-        autoenter = input("Do you want it to autoenter? Yes or No ")
+if Mouse.lower() == MouseKeyboard.lower():
 
-        while 2 > 1:
-            keyboard.write(answer)
-            if autoenter == "Yes":
-                keyboard.press_and_release("enter")
+    Left = "left"
+    Right = "right"
+    delay = int(input("Choose a delay (in seconds)? "))
+    hotkey = input("Choose a hotkey ")
+    LeftRight = input("Left or Right? ")
 
-    if write.lower() == writeN.lower():
-        answer = input("Enter Button ")
+    if LeftRight.lower() == Left.lower():
+        status = False
+        def onoff(eventtype):
+            global status
+            status = not status  # Toggle
+            print("On" if status else "Off")
 
-        while 2 > 1:
-            keyboard.press_and_release(answer)
+        keyboard.on_press_key(hotkey, onoff)
 
-    else:
-        print("Invalid Input")
+        while True:
+            if status == True:
+                mouse.click("left")
+                time.sleep(delay)
 
-def morkmouse():
-    mousestuffL = "Left"
-    mousestuffR = "Right"
-    mousestuff = input("Would you like to Right or Left click? ")
+    if LeftRight.lower() == Right.lower():
+        status = False
+        def onoff(eventtype):
+            global status
+            status = not status  # Toggle
+            print("On" if status else "Off")
 
-    if mousestuff.lower() == mousestuffR.lower():
-        switchMR()
+        keyboard.on_press_key(hotkey, onoff)
 
-    if mousestuff.lower() == mousestuffL.lower():
-        switchML()
-
-def switchMR():
-    global start
-
-    hotkey = input("Enter hotkey")
-    while 2 > 1:
-
-        if keyboard.is_pressed(hotkey) and start == 0:
-            print("On")
-            start = 1
-            time.sleep(0.2)
-
-        if keyboard.is_pressed(hotkey) and start == 1:
-            print("Off")
-            start = 0
-            time.sleep(0.2)
-
-def switchML():
-    global start
-    Y = 0
-    start = 0
-    hotkey = input("Enter hotkey")
-    while 2 > 1:
-
-        if keyboard.is_pressed(hotkey) and start == 0:
-            print("On")
-            start = 1
-            time.sleep(0.2)
-
-        if keyboard.is_pressed(hotkey) and start == 1:
-            print("Off")
-            start = 0
-            time.sleep(0.2)
-
-        if start == 1 and Y == 0:
-            mouse.click(button="left")
-            Y = 1
-            time.sleep(1)
-            Y = 0
-            continue
-
-def question():
-    global mork
-
-    morkK = "Keyboard"
-    morkM = "Mouse"
-    mork = input("What would you like to use? Mouse or Keyboard ")
+        while True:
+            if status == True:
+                mouse.click("right")
+                time.sleep(delay)
 
 
-
-    if mork.lower() == morkM.lower():
-        morkmouse()
-
-    if mork.lower() == morkK.lower():
-        morkkeyboard()
-
-question()
 
 
 
