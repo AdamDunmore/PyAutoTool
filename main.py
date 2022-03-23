@@ -44,14 +44,15 @@ if Mouse.lower() == MouseKeyboard.lower():
                 time.sleep(delay)
 
 if MouseKeyboard.lower() == Keyboard.lower():
-        TypeYes = "yes"
-        TypeNo = "no"
+        Mode_TypeType = "Type"
+        Mode_TypeSingleKey = "Key"
+        Mode_Hotkey = "Hotkey"
 
-        Type = input("Would you like to type something? ")
+        Type = input("What mode would you like? "Type", "Key" or "Hotkey"?  ")
         delay = float(input("What would you like the delay to be? "))
         hotkey = input("What is your hotkey? ")
 
-        if TypeYes.lower() == Type.lower():
+        if Mode_TypeType.lower() == Type.lower():
             status = False
             text = input("What would you like to type? ")
             def onoff(eventtype):
@@ -67,24 +68,31 @@ if MouseKeyboard.lower() == Keyboard.lower():
                     keyboard.write(text)
                     time.sleep(delay)
 
-        if TypeNo.lower() == Type.lower():
+        if Mode_TypeSingleKey.lower() == Type.lower():
             status = False
             key = input("What key would you like to enter? ")
             def onoff(eventtype):
                 global status
                 status = not status  # Toggle
-                print("On" if status else "Off")
-
-
-            keyboard.on_press_key(hotkey, onoff)
-
+                print("On" if status else "Off")        
+            keyboard.on_press_key(hotkey, onoff)        
             while True:
                 if status == True:
                     keyboard.press_and_release(key)
                     keyboard.press_and_release("enter")
                     time.sleep(delay)
 
-
+        if Mode_Hotkey.lower == Type.lower:
+            status = False
+            hotkey = input #needs finished
+            global status
+            status = not status  # Toggle
+            print("On" if status else "Off")  
+        keyboard.on_press_key(hotkey,onoff)
+        while True:
+            if status == True:
+                #needs finished
+                time.sleep(delay)
 
 
 
