@@ -5,6 +5,12 @@ import time
 Mouse = "mouse"
 Keyboard = "keyboard"
 
+
+
+
+
+
+
 MouseKeyboard = input("Would you like to use Mouse or Keyboard? ")
 
 
