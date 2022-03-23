@@ -7,6 +7,13 @@ Keyboard = "keyboard"
 
 MouseKeyboard = input("Would you like to use Mouse or Keyboard? ")
 
+
+
+
+
+
+
+
 if Mouse.lower() == MouseKeyboard.lower():
 
     Left = "left"
@@ -43,6 +50,15 @@ if Mouse.lower() == MouseKeyboard.lower():
                 mouse.click("right")
                 time.sleep(delay)
 
+
+                
+                
+                
+                
+                
+
+                
+                
 if MouseKeyboard.lower() == Keyboard.lower():
         Mode_TypeType = "Type"
         Mode_TypeSingleKey = "Key"
