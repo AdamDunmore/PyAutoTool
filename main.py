@@ -5,6 +5,11 @@ import time
 Mouse = "mouse"
 Keyboard = "keyboard"
 
+def onoff(eventtype):
+        global status
+        status = not status  # Toggle
+        print("On" if status else "Off")
+
 
 
 
@@ -30,11 +35,7 @@ if Mouse.lower() == MouseKeyboard.lower():
 
     if LeftRight.lower() == Left.lower():
         status = False
-        def onoff(eventtype):
-            global status
-            status = not status  # Toggle
-            print("On" if status else "Off")
-
+        
         keyboard.on_press_key(hotkey, onoff)
 
         while True:
@@ -44,10 +45,6 @@ if Mouse.lower() == MouseKeyboard.lower():
 
     if LeftRight.lower() == Right.lower():
         status = False
-        def onoff(eventtype):
-            global status
-            status = not status  # Toggle
-            print("On" if status else "Off")
 
         keyboard.on_press_key(hotkey, onoff)
 
@@ -79,11 +76,6 @@ if MouseKeyboard.lower() == Keyboard.lower():
     if Mode_TypeType.lower() == Type.lower():
             status = False
             text = input("What would you like to type? ")
-            def onoff(eventtype):
-                global status
-                status = not status  # Toggle
-                print("On" if status else "Off")
-
 
             keyboard.on_press_key(hotkey, onoff)
 
@@ -98,11 +90,9 @@ if MouseKeyboard.lower() == Keyboard.lower():
         if Mode_TypeSingleKey.lower() == Type.lower():
             status = False
             key = input("What key would you like to enter? ")
-            def onoff(eventtype):
-                global status
-                status = not status  # Toggle
-                print("On" if status else "Off")        
+      
             keyboard.on_press_key(hotkey, onoff)        
+          
             while True:
                 if status == True:
                     keyboard.press_and_release(key)
@@ -114,14 +104,14 @@ if MouseKeyboard.lower() == Keyboard.lower():
         if Mode_Hotkey.lower == Type.lower:
             status = False
             hotkey = input #needs finished
-            global status
-            status = not status  # Toggle
-            print("On" if status else "Off")  
-        keyboard.on_press_key(hotkey,onoff)
-        while True:
-            if status == True:
-                #needs finished
-                time.sleep(delay)
+            global status  
+     
+            keyboard.on_press_key(hotkey,onoff)
+     
+            while True:
+                    if status == True:
+                        #needs finished
+                        time.sleep(delay)
 
 
 
