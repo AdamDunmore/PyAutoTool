@@ -90,6 +90,7 @@ if MouseKeyboard.lower() == Keyboard.lower():
             while True:
                 if status == True:
                     keyboard.write(text)
+                    keyboard.press_and_release("enter")
                     time.sleep(delay)
 
         
@@ -106,7 +107,6 @@ if MouseKeyboard.lower() == Keyboard.lower():
             while True:
                 if status == True:
                     keyboard.press_and_release(key)
-                    keyboard.press_and_release("enter")
                     time.sleep(delay)
 
                     
