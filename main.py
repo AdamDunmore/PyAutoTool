@@ -4,6 +4,8 @@ import time
 
 Mouse = "mouse"
 Keyboard = "keyboard"
+Y = True
+N = No
 
 
 
@@ -70,9 +72,10 @@ if MouseKeyboard.lower() == Keyboard.lower():
         Mode_TypeSingleKey = "Key"
         Mode_Hotkey = "Hotkey"
 
-        Type = input("What mode would you like? "Type", "Key" or "Hotkey"?  ")
+        Type = input("What mode would you like? Type, Key or Hotkey? ")
         delay = float(input("What would you like the delay to be? "))
         hotkey = input("What is your hotkey? ")
+        autoenter = bool(input("Would you like auto enter Y/N"))
 
        
 #Type
@@ -90,7 +93,8 @@ if MouseKeyboard.lower() == Keyboard.lower():
             while True:
                 if status == True:
                     keyboard.write(text)
-                    keyboard.press_and_release("enter")
+                    if autoenter == True:
+                        key
                     time.sleep(delay)
 
         
