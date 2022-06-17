@@ -1,7 +1,10 @@
+#imports
 import keyboard
 import mouse
 import time
 
+
+#Sets Variables
 Mouse = "mouse"
 Keyboard = "keyboard"
 Y = True
