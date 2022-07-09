@@ -28,8 +28,7 @@ def Options():
 
         #Process
         def SingleKeyProcess():
-            print("On")
-            global  status
+            global status
             status = False
 
             def onoff(eventtype):
@@ -53,9 +52,47 @@ def Options():
     elif InitialOptions.get() == "MultiKey":
         Multikey = tk.Tk()
         Multikey.title("Multikey")
-    elif InitialOptions.get() == "Hotkey":
-        Hotkey = tk.Tk()
-        Hotkey.title("Hotkey")
+
+        #Key Entry
+        MultikeyChoiseLabel = Label(Multikey, text="Enter Keys")
+        MultikeyChoiseLabel.grid(row=0,column=0)
+        MultikeyChoiseEntry = Entry(Multikey)
+        MultikeyChoiseEntry.grid(row=0,column=1)
+
+        #Delay
+        MultikeyDelayLabel = Label(Multikey,text="Enter Delay (in Seconds)")
+        MultikeyDelayLabel.grid(row=1,column=0)
+        MultikeyDelayEntry = Entry(Multikey)
+        MultikeyDelayEntry.grid(row=1,column=1)
+
+        #Activation/Deactivation Key
+        ADKeyLabel = Label(Multikey, text="Enter key for Activation/Deactivation")
+        ADKeyLabel.grid(row=2,column=0)
+        ADKeyEntry = Entry(Multikey)
+        ADKeyEntry.grid(row=2, column=1)
+
+        #Process
+        def MultiKeyProcess():
+            global status
+            status = False
+
+            def onoff(eventtype):
+                global status
+                status = not bool(status)  # Toggle
+                print("On" if status else "Off")
+
+
+            ADKey = ADKeyEntry.get()
+            keyboard.on_press_key(ADKey, onoff)
+            while True:
+                if status == True:
+                    keyboard.press_and_release(MultikeyChoiseEntry.get())
+                    time.sleep(int(MultikeyDelayEntry.get()))
+
+        #Confirm Choise
+        ConfirmMK = Button(Multikey, text="Confirm", command=MultiKeyProcess)
+        ConfirmMK.grid(row=3, column=0)
+
 
 
 window = tk.Tk()
@@ -65,7 +102,7 @@ window.title("Options")
 InitialOptions = StringVar()
 InitialOptions.set("Single Key")
 
-OptionsDropDown = OptionMenu(window,InitialOptions,"Single Key", "MultiKey", "Hotkey")
+OptionsDropDown = OptionMenu(window,InitialOptions,"Single Key", "MultiKey")
 OptionsDropDown.pack()
 OptionsButton = Button(window, text="Confirm", command=Options)
 OptionsButton.pack()
