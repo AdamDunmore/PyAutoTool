@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import *
 import time
 import keyboard
+import mouse
 
 def Options():
     if InitialOptions.get() == "Single Key":
@@ -93,6 +94,12 @@ def Options():
         ConfirmMK = Button(Multikey, text="Confirm", command=MultiKeyProcess)
         ConfirmMK.grid(row=3, column=0)
 
+    elif InitialOptions.get() == "Mouse":
+        Mouse = tk.Tk()
+        Mouse.title("Mouse")
+
+        #finish radio button
+
 
 
 window = tk.Tk()
@@ -102,7 +109,7 @@ window.title("Options")
 InitialOptions = StringVar()
 InitialOptions.set("Single Key")
 
-OptionsDropDown = OptionMenu(window,InitialOptions,"Single Key", "MultiKey")
+OptionsDropDown = OptionMenu(window,InitialOptions,"Single Key", "MultiKey", "Mouse")
 OptionsDropDown.pack()
 OptionsButton = Button(window, text="Confirm", command=Options)
 OptionsButton.pack()
