@@ -98,12 +98,53 @@ def Options():
         Mouse = tk.Tk()
         Mouse.title("Mouse")
 
-        #finish radio button
+        MouseR = StringVar(master=Mouse)
+        MouseR.set("left")
+
+        MouseRadioLabel = Label(Mouse, text="Choose Mouse Button")
+        MouseRadioLabel.grid(row=0, column=0)
+
+        MouseRadioLeft = Radiobutton(Mouse, text="Left", variable=MouseR, value="left")
+        MouseRadioLeft.grid(column=0,row=1)
+        MouseRadioRight = Radiobutton(Mouse,text="Right", variable=MouseR, value="right")
+        MouseRadioRight.grid(column=1, row=1)
+
+        #Delay
+        MouseDelayLabel = Label(Mouse,text="Enter Delay (in Seconds)")
+        MouseDelayLabel.grid(row=2,column=0)
+        MouseDelayEntry = Entry(Mouse)
+        MouseDelayEntry.grid(row=2,column=1)
+
+        #Activation/Deactivation Key
+        ADKeyLabel = Label(Mouse, text="Enter key for Activation/Deactivation")
+        ADKeyLabel.grid(row=3,column=0)
+        ADKeyEntry = Entry(Mouse)
+        ADKeyEntry.grid(row=3, column=1)
+
+        def MouseProcess():
+            global status
+            status = False
+
+            def onoff(eventtype):
+                global status
+                status = not bool(status)  # Toggle
+                print("On" if status else "Off")
+
+            ADKey = ADKeyEntry.get()
+            keyboard.on_press_key(ADKey, onoff)
+            while True:
+                if status == True:
+                    mouse.click(MouseR.get())
+                    time.sleep(int(MouseDelayEntry.get()))
+
+        MouseButton = Button(Mouse, text="Confirm", command=MouseProcess)
+        MouseButton.grid(row=4, column=0)
 
 
 
 window = tk.Tk()
 window.title("Options")
+window.geometry("220x65")
 
 
 InitialOptions = StringVar()
