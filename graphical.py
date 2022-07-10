@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import *
-import time
 import keyboard
 import mouse
 
@@ -16,7 +15,7 @@ def Options():
         SingleKeyChoiseEntry.grid(row=0,column=1)
 
         #Delay
-        SingleKeyDelayLabel = Label(SingleKey,text="Enter Delay (in Seconds)")
+        SingleKeyDelayLabel = Label(SingleKey,text="Enter Delay (in milliseconds)")
         SingleKeyDelayLabel.grid(row=1,column=0)
         SingleKeyDelayEntry = Entry(SingleKey)
         SingleKeyDelayEntry.grid(row=1,column=1)
@@ -32,18 +31,25 @@ def Options():
             global status
             status = False
 
+
             def onoff(eventtype):
                 global status
                 status = not bool(status)  # Toggle
                 print("On" if status else "Off")
 
-
             ADKey = ADKeyEntry.get()
-            keyboard.on_press_key(ADKey, onoff)
-            while True:
+            SingleKeyChoiseEntryV = SingleKeyChoiseEntry.get()
+            SingleKeyDelayEntryV = SingleKeyDelayEntry.get()
+
+            def Event():
                 if status == True:
-                    keyboard.press_and_release(SingleKeyChoiseEntry.get())
-                    time.sleep(int(SingleKeyDelayEntry.get()))
+                    keyboard.press_and_release(SingleKeyChoiseEntryV)
+                    Multikey.after(int(SingleKeyDelayEntryV), Event)
+                elif status != True:
+                    Multikey.after(int(SingleKeyDelayEntryV), Event)
+
+            Event()
+            keyboard.on_press_key(ADKey, onoff)
 
         #Confirm Choise
         ConfirmSK = Button(SingleKey, text="Confirm", command=SingleKeyProcess)
@@ -61,7 +67,7 @@ def Options():
         MultikeyChoiseEntry.grid(row=0,column=1)
 
         #Delay
-        MultikeyDelayLabel = Label(Multikey,text="Enter Delay (in Seconds)")
+        MultikeyDelayLabel = Label(Multikey,text="Enter Delay (in milliseconds)")
         MultikeyDelayLabel.grid(row=1,column=0)
         MultikeyDelayEntry = Entry(Multikey)
         MultikeyDelayEntry.grid(row=1,column=1)
@@ -73,25 +79,32 @@ def Options():
         ADKeyEntry.grid(row=2, column=1)
 
         #Process
-        def MultiKeyProcess():
+        def MultikeyProcess():
             global status
             status = False
+
 
             def onoff(eventtype):
                 global status
                 status = not bool(status)  # Toggle
                 print("On" if status else "Off")
 
-
             ADKey = ADKeyEntry.get()
-            keyboard.on_press_key(ADKey, onoff)
-            while True:
+            MultikeyChoiseEntryV = MultikeyChoiseEntry.get()
+            MultikeyDelayEntryV = MouseDelayEntry.get()
+
+            def Event():
                 if status == True:
-                    keyboard.press_and_release(MultikeyChoiseEntry.get())
-                    time.sleep(int(MultikeyDelayEntry.get()))
+                    keyboard.write(MultikeyChoiseEntryV)
+                    Multikey.after(int(MultikeyDelayEntryV), Event)
+                elif status != True:
+                    Multikey.after(int(MultikeyDelayEntryV), Event)
+
+            Event()
+            keyboard.on_press_key(ADKey, onoff)
 
         #Confirm Choise
-        ConfirmMK = Button(Multikey, text="Confirm", command=MultiKeyProcess)
+        ConfirmMK = Button(Multikey, text="Confirm", command=MultikeyProcess)
         ConfirmMK.grid(row=3, column=0)
 
     elif InitialOptions.get() == "Mouse":
@@ -110,7 +123,7 @@ def Options():
         MouseRadioRight.grid(column=1, row=1)
 
         #Delay
-        MouseDelayLabel = Label(Mouse,text="Enter Delay (in Seconds)")
+        MouseDelayLabel = Label(Mouse,text="Enter Delay (in milliseconds)")
         MouseDelayLabel.grid(row=2,column=0)
         MouseDelayEntry = Entry(Mouse)
         MouseDelayEntry.grid(row=2,column=1)
@@ -125,17 +138,28 @@ def Options():
             global status
             status = False
 
+
             def onoff(eventtype):
                 global status
                 status = not bool(status)  # Toggle
                 print("On" if status else "Off")
 
             ADKey = ADKeyEntry.get()
-            keyboard.on_press_key(ADKey, onoff)
-            while True:
+            MouseRV = MouseR.get()
+            MouseDelayEntryV = MouseDelayEntry.get()
+
+            def Event():
                 if status == True:
-                    mouse.click(MouseR.get())
-                    time.sleep(int(MouseDelayEntry.get()))
+                    mouse.click(MouseRV)
+                    Mouse.after(int(MouseDelayEntryV), Event)
+                elif status != True:
+                    Mouse.after(int(MouseDelayEntryV), Event)
+
+            Event()
+            keyboard.on_press_key(ADKey, onoff)
+
+
+
 
         MouseButton = Button(Mouse, text="Confirm", command=MouseProcess)
         MouseButton.grid(row=4, column=0)
