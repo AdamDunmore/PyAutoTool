@@ -2,6 +2,31 @@ from tkinter import *
 import keyboard
 import mouse
 
+def stop():
+    keyboard.unhook_all_hotkeys()
+
+class Processes:
+    def onoff():
+        status = not bool(status)  # Toggle
+        print("On" if status else "Off")
+
+    def Event(self):
+        if self.status == True:
+            keyboard.press_and_release(self.button)
+            window.after(self.delay, Event)
+        elif self.status == False:
+            window.after(self.delay, Event)
+
+    def addHotkey(self):
+        keyboard.add_hotkey(self.actKey, self.onoff)
+        self.Event()
+
+    def __init__(self, delay, key, buttonKey):        
+        self.delay = int(delay)
+        self.actKey = key
+        self.button = buttonKey
+        self.status = False
+
 
 def singlekeyFun():
     SingleKey = Frame(window, bg="#404040",width=320, height=130, padx=10, pady=10, highlightthickness=3, highlightbackground="grey", relief="solid")
@@ -24,36 +49,19 @@ def singlekeyFun():
     ADKeyLabel.place(x=130, y=2)
     ADKeyEntry.place(x=240,y=2)
 
-    # Process
-    def SingleKeyProcess():
-        global status
-        status = False
+    def start():
+        singleKey = Processes(SingleKeyDelayEntry.get(),ADKeyEntry.get(),SingleKeyChoiseEntry.get())
+        singleKey.addHotkey
 
-        def onoff():
-            global status
-            status = not bool(status)  # Toggle
-            print("On" if status else "Off")
-
-        def Event():
-            if status == True:
-                keyboard.press_and_release(SingleKeyChoiseEntry.get())
-                SingleKey.after(int(SingleKeyDelayEntry.get()), Event)
-            elif status != True:
-                SingleKey.after(int(SingleKeyDelayEntry.get()), Event)
-
-        Event()
-        keyboard.add_hotkey(ADKeyEntry.get(), onoff)
 
     # Confirm Choise
-    ConfirmSK = Button(SingleKey, text="Confirm", command=SingleKeyProcess,height=1, bg="#404040", fg="white", activebackground="grey", activeforeground="white")
+    ConfirmSK = Button(SingleKey, text="Confirm", command=start,height=1, bg="#404040", fg="white", activebackground="grey", activeforeground="white")
     ConfirmSK.place(x=5, y=80)
-
-    def stop():
-        keyboard.unhook_all_hotkeys()
 
     StopButton = Button(SingleKey, text="Stop", command=stop,height=1, bg="#404040", fg="white", activebackground="grey", activeforeground="white")
     StopButton.place(x=65, y=80)
 
+                         #--------------------------------------------------------------------------------------------#
 def multikeyFun():
     Multikey = Frame(window, bg="#404040", width=320, height=130, padx=10, pady=10, highlightthickness=3, highlightbackground="grey", relief="solid")
     Multikey.place(x=140, y=10)
