@@ -3,9 +3,10 @@ from tkinter import *
 import keyboard
 import mouse
 
-EntryColour = "grey"
-BackgroundColour = "#404040"
+EntryColour = "#181A21"
+BackgroundColour = "#303443"
 ForegroundColour = "#ffffff"
+BorderColour = "#414554"
 
 def stop():
     keyboard.unhook_all_hotkeys()
@@ -78,18 +79,18 @@ class FrameConstructor:
         self.MouseR.set("left")
 
         #Construct Frame
-        self.MyFrame = Frame(window, bg=BackgroundColour,width=320, height=132, padx=10, pady=10, highlightthickness=3, highlightbackground=EntryColour, relief="solid")
+        self.MyFrame = Frame(window, bg=BackgroundColour,width=320, height=132, padx=10, pady=10, highlightthickness=3, highlightbackground=BorderColour, relief="solid")
         self.MyFrame.place(x=140, y=10)
 
         # Delay
         Label(self.MyFrame, text="Enter Delay (in milliseconds):",fg=ForegroundColour,font=("Segoe UI", 10,"underline"),bg=BackgroundColour).place(x=5,y=32)
-        self.DelayEntry = Entry(self.MyFrame,fg=ForegroundColour,font=("Segoe UI", 10),bg=EntryColour,width=16)
+        self.DelayEntry = Entry(self.MyFrame,fg=ForegroundColour,font=("Segoe UI", 10),bg=EntryColour,width=16,highlightcolor=BorderColour)
         self.DelayEntry.place(x=178, y=32)
 
 
         # Activation/Deactivation Key
         Label(self.MyFrame, text="Enter Toggle Key:", font=("Segoe UI", 10,"underline"),fg=ForegroundColour,bg=BackgroundColour).place(x=130, y=2)
-        self.ADKeyEntry = Entry(self.MyFrame, font=("Segoe UI", 10),fg=ForegroundColour, bg=EntryColour,width=7)
+        self.ADKeyEntry = Entry(self.MyFrame, font=("Segoe UI", 10),fg=ForegroundColour, bg=EntryColour,width=7,highlightcolor=BorderColour)
         self.ADKeyEntry.place(x=240,y=2)
 
         #Single Key Entry
@@ -100,7 +101,7 @@ class FrameConstructor:
             
             elif self.keyInputText == "Keys":
                 self.KeyChoiseLabel.configure(text="Enter Keys:")
-            self.KeyChoiseEntry = Entry(self.MyFrame,font=("Segoe UI",10), bg=EntryColour,fg=ForegroundColour,width=7)  
+            self.KeyChoiseEntry = Entry(self.MyFrame,font=("Segoe UI",10), bg=EntryColour,fg=ForegroundColour,width=7,highlightcolor=BorderColour)  
             self.KeyChoiseLabel.place(x=5,y=2)
             self.KeyChoiseEntry.place(x=75,y=2) 
 
@@ -146,11 +147,11 @@ def mouseFun():
 window = Tk()
 window.title("Autoclicker")
 window.geometry("470x150")
-window.configure(bg="black")
+window.configure(bg="#525665")
 window.resizable(False,False)
 window.attributes("-topmost",True)
 
-optionsFrame = Frame(window, bg=BackgroundColour,width=120, height=132, highlightthickness=3, highlightbackground=EntryColour, relief="solid")
+optionsFrame = Frame(window, bg=BackgroundColour,width=120, height=132, highlightthickness=3, highlightbackground=BorderColour, relief="solid")
 optionsFrame.place(x=10, y=10)
 
 InitialOptions = StringVar()
