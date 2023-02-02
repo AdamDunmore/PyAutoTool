@@ -1,3 +1,4 @@
+import PySimpleGUI as sg
 from tkinter import *
 import keyboard
 import mouse
@@ -68,7 +69,7 @@ class FrameConstructor:
             self.AEState = self.AE.get()
             print(self.AEState)
 
-    def __init__(self, keyInput, keyInputText, AutoEnter):
+    def __init__(self, keyInput = False, keyInputText = "", AutoEnter = False):
         self.keyInput = bool(keyInput)
         self.keyInputText = keyInputText
         self.AutoEnter = AutoEnter
@@ -134,14 +135,13 @@ class FrameConstructor:
 
 
 def singlekeyFun():  
-    singleKeyFrame = FrameConstructor(True, "Key", False)
+    singleKeyFrame = FrameConstructor(keyInput = True,keyInputText= "Key",AutoEnter= False)
     
 def multikeyFun():
-    multikeyFrame = FrameConstructor(True, "Keys", True)
-
+    multikeyFrame = FrameConstructor(keyInput = True,keyInputText= "Keys",AutoEnter= True)
 
 def mouseFun():
-    mouseFrame = FrameConstructor(False, "Mouse", False)
+    mouseFrame = FrameConstructor(keyInput = False,keyInputText = "Mouse",AutoEnter = False)
 
 window = Tk()
 window.title("Autoclicker")
