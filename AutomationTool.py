@@ -2,197 +2,155 @@ from tkinter import *
 import keyboard
 import mouse
 
+EntryColour = "grey"
+BackgroundColour = "#404040"
+ForegroundColour = "#ffffff"
 
-def singlekeyFun():
-    SingleKey = Frame(window, bg="#404040",width=320, height=130, padx=10, pady=10, highlightthickness=3, highlightbackground="grey", relief="solid")
-    SingleKey.place(x=140, y=10)
-    # Key Entry
-    SingleKeyChoiseLabel = Label(SingleKey, text="Enter Key:",font=("Segoe UI",10,"underline"), bg="#404040",fg="white")
-    SingleKeyChoiseEntry = Entry(SingleKey,font=("Segoe UI",10), bg="grey",fg="white",width=7)
-    SingleKeyChoiseLabel.place(x=5,y=2)
-    SingleKeyChoiseEntry.place(x=70,y=2)
+def stop():
+    keyboard.unhook_all_hotkeys()
+    global repeat
+    repeat = False
 
-    # Delay
-    SingleKeyDelayLabel = Label(SingleKey, text="Enter Delay (in milliconds):",fg="white",font=("Segoe UI", 10,"underline"),bg="#404040")
-    SingleKeyDelayEntry = Entry(SingleKey,fg="white",font=("Segoe UI", 10),bg="grey",width=18)
-    SingleKeyDelayLabel.place(x=5,y=32)
-    SingleKeyDelayEntry.place(x=165, y=32)
+class Processes:
+    def __init__(self, delay, key, buttonKey,AE, Mode):       
+        self.delay = int(delay)
+        self.actKey = key
+        self.button = buttonKey
+        self.status = False
+        self.eventStatus = False
+        self.AE = AE
+        self.Mode = Mode
+        repeat = True
 
-    # Activation/Deactivation Key
-    ADKeyLabel = Label(SingleKey, text="Enter Toggle Key:", font=("Segoe UI", 10,"underline"),fg="white",bg="#404040")
-    ADKeyEntry = Entry(SingleKey, font=("Segoe UI", 10),fg="white", bg="grey",width=7)
-    ADKeyLabel.place(x=130, y=2)
-    ADKeyEntry.place(x=240,y=2)
+    def onoff(self):
+        self.status = not bool(self.status)  # Toggle
+        print("On" if self.status else "Off")
 
-    # Process
-    def SingleKeyProcess():
-        global status
-        status = False
+    def Event(self):
+        if self.status == True:
+            keyboard.press_and_release(self.button)
+        if repeat == True:        
+            window.after(self.delay, self.Event)
 
-        def onoff():
-            global status
-            status = not bool(status)  # Toggle
-            print("On" if status else "Off")
+    def MK_Event(self):
+        if self.status == True:
+            keyboard.write(self.button)
+            if self.AE == 1:
+                keyboard.send("enter")
+        if repeat == True:                
+            window.after(self.delay, self.MK_Event)
 
-        def Event():
-            if status == True:
-                keyboard.press_and_release(SingleKeyChoiseEntry.get())
-                SingleKey.after(int(SingleKeyDelayEntry.get()), Event)
-            elif status != True:
-                SingleKey.after(int(SingleKeyDelayEntry.get()), Event)
+        
 
-        Event()
-        keyboard.add_hotkey(ADKeyEntry.get(), onoff)
+    def Mouse_Event(self):
+        if self.status:
+            mouse.click(self.button)
+        if repeat == True:
+            window.after(self.delay, self.Mouse_Event)
 
-    # Confirm Choise
-    ConfirmSK = Button(SingleKey, text="Confirm", command=SingleKeyProcess,height=1, bg="#404040", fg="white", activebackground="grey", activeforeground="white")
-    ConfirmSK.place(x=5, y=80)
 
-    def stop():
-        keyboard.unhook_all_hotkeys()
+    def addHotkey(self):
+        global repeat
+        repeat = True
+        keyboard.add_hotkey(self.actKey, self.onoff)
+        if self.Mode == "Key":
+            self.Event()
 
-    StopButton = Button(SingleKey, text="Stop", command=stop,height=1, bg="#404040", fg="white", activebackground="grey", activeforeground="white")
-    StopButton.place(x=65, y=80)
+        elif self.Mode == "Keys":
+            self.MK_Event()
 
+        elif self.Mode == "Mouse":
+            self.Mouse_Event()
+
+class FrameConstructor:
+
+    def updateAE(self):    
+            self.AEState = self.AE.get()
+            print(self.AEState)
+
+    def __init__(self, keyInput, keyInputText, AutoEnter):
+        self.keyInput = bool(keyInput)
+        self.keyInputText = keyInputText
+        self.AutoEnter = AutoEnter
+        self.AE = IntVar()
+        self.MouseR = StringVar()
+        self.MouseR.set("left")
+
+        #Construct Frame
+        self.MyFrame = Frame(window, bg=BackgroundColour,width=320, height=132, padx=10, pady=10, highlightthickness=3, highlightbackground=EntryColour, relief="solid")
+        self.MyFrame.place(x=140, y=10)
+
+        # Delay
+        Label(self.MyFrame, text="Enter Delay (in milliseconds):",fg=ForegroundColour,font=("Segoe UI", 10,"underline"),bg=BackgroundColour).place(x=5,y=32)
+        self.DelayEntry = Entry(self.MyFrame,fg=ForegroundColour,font=("Segoe UI", 10),bg=EntryColour,width=16)
+        self.DelayEntry.place(x=178, y=32)
+
+
+        # Activation/Deactivation Key
+        Label(self.MyFrame, text="Enter Toggle Key:", font=("Segoe UI", 10,"underline"),fg=ForegroundColour,bg=BackgroundColour).place(x=130, y=2)
+        self.ADKeyEntry = Entry(self.MyFrame, font=("Segoe UI", 10),fg=ForegroundColour, bg=EntryColour,width=7)
+        self.ADKeyEntry.place(x=240,y=2)
+
+        #Single Key Entry
+        if self.keyInput == True:
+            self.KeyChoiseLabel = Label(self.MyFrame,font=("Segoe UI",10,"underline"), bg=BackgroundColour,fg=ForegroundColour)
+            if self.keyInputText == "Key":
+                self.KeyChoiseLabel.configure(text="Enter Key:")
+            
+            elif self.keyInputText == "Keys":
+                self.KeyChoiseLabel.configure(text="Enter Keys:")
+            self.KeyChoiseEntry = Entry(self.MyFrame,font=("Segoe UI",10), bg=EntryColour,fg=ForegroundColour,width=7)  
+            self.KeyChoiseLabel.place(x=5,y=2)
+            self.KeyChoiseEntry.place(x=75,y=2) 
+
+
+        elif self.keyInput == False:
+            #Mouse Buttons
+            Radiobutton(self.MyFrame, variable=self.MouseR,text="Left", value="left",bg=BackgroundColour, activeforeground=EntryColour, activebackground=BackgroundColour,selectcolor=EntryColour, fg=ForegroundColour).place(x=5, y=2)
+            Radiobutton(self.MyFrame, variable=self.MouseR,text="Right", value="right",bg=BackgroundColour, activeforeground=EntryColour, activebackground=BackgroundColour,selectcolor=EntryColour, fg=ForegroundColour).place(x=55, y=2,)
+
+
+        #Confirm Choise
+        Button(self.MyFrame, text="Confirm", command=self.start,height=1, bg=BackgroundColour, fg=ForegroundColour, activebackground=EntryColour, activeforeground=ForegroundColour).place(x=5, y=80)
+        #Stop
+        Button(self.MyFrame, text="Stop", command=stop,height=1, bg=BackgroundColour, fg=ForegroundColour, activebackground=EntryColour, activeforeground=ForegroundColour).place(x=65, y=80)
+
+        
+
+        if self.AutoEnter == True:
+            # AutoEnter
+            Checkbutton(self.MyFrame, text="AE",foreground=ForegroundColour,background=BackgroundColour,  variable=self.AE, selectcolor=EntryColour,activebackground=BackgroundColour,activeforeground=ForegroundColour,command=self.updateAE).place(x=250,y=80)
+
+
+
+    def start(self):
+        if self.keyInput == True:
+            self.button = self.KeyChoiseEntry.get()
+
+        if self.keyInput == False:
+            self.button = self.MouseR.get()
+        self.Process = Processes(self.DelayEntry.get(), self.ADKeyEntry.get(), self.button, self.AE.get(),self.keyInputText)
+        self.Process.addHotkey()
+
+
+def singlekeyFun():  
+    singleKeyFrame = FrameConstructor(True, "Key", False)
+    
 def multikeyFun():
-    Multikey = Frame(window, bg="#404040", width=320, height=130, padx=10, pady=10, highlightthickness=3, highlightbackground="grey", relief="solid")
-    Multikey.place(x=140, y=10)
+    multikeyFrame = FrameConstructor(True, "Keys", True)
 
-    # Key Entry
-    MultikeyChoiseLabel = Label(Multikey, text="Enter Sentance:",bg="#404040",fg="white", font=("Segoe UI", 10, "underline"))
-    MultikeyChoiseEntry = Entry(Multikey,fg="white", bg="grey", font=("Segoe UI", 10), width=26)
-    MultikeyChoiseLabel.place(x=5, y=2)
-    MultikeyChoiseEntry.place(x=100,y=2)
-
-    # Delay
-    MultikeyDelayLabel = Label(Multikey, text="Enter Delay (in milliseconds):", bg="#404040", fg="white", font=("Segoe UI", 10, "underline"))
-    MultikeyDelayEntry = Entry(Multikey, bg="grey", fg="white", font=("Segoe UI", 10), width=15)
-    MultikeyDelayLabel.place(x=5, y=30)
-    MultikeyDelayEntry.place(x=180, y=30)
-
-    # Activation/Deactivation Key
-    ADKeyLabel = Label(Multikey, text="Enter key for Activation/Deactivation:", bg="#404040", fg="white", font=("Segoe UI", 10,"underline"))
-    ADKeyEntry = Entry(Multikey, bg="grey", fg="white", font=("Segoe UI", 10), width=6)
-    ADKeyLabel.place(x=5, y=55)
-    ADKeyEntry.place(x=230, y=55)
-
-    # AutoEnter
-    AE = StringVar(master=Multikey)
-    AE.set("No AutoEnter")
-
-
-    AELabel = Label(Multikey, text="AutoEnter:",font=("Segoe UI", 10, "underline"),fg="white", bg="#404040")
-    AE1 = Radiobutton(Multikey, variable=AE, value="No AutoEnter", bg="#404040")
-    AE2 = Radiobutton(Multikey, variable=AE, value="AutoEnter", bg="#404040")
-    AE1Label = Label(Multikey,text="No",font=("Segoe UI", 10),fg="white", bg="#404040")
-    AE2Label = Label(Multikey,text="Yes",font=("Segoe UI", 10),fg="white", bg="#404040")
-    AELabel.place(x=110, y=80)
-    AE1.place(x=180, y=80)
-    AE1Label.place(x=200,y=80)
-    AE2.place(x=230, y=80)
-    AE2Label.place(x=250, y=80)
-    # Process
-    def MultikeyProcess():
-        global status
-        status = False
-
-        def onoff():
-            global status
-            status = not bool(status)  # Toggle
-            print("On" if status else "Off")
-
-        def Event():
-            if status == True:
-                keyboard.write(MultikeyChoiseEntry.get())
-                if AE.get() == "AutoEnter":
-                    keyboard.send("enter")
-
-                Multikey.after(int(MultikeyDelayEntry.get()), Event)
-            elif status != True:
-                Multikey.after(int(MultikeyDelayEntry.get()), Event)
-
-        Event()
-        keyboard.add_hotkey(ADKeyEntry.get(), onoff)
-
-    # Confirm Choise
-    ConfirmMK = Button(Multikey, text="Confirm", command=MultikeyProcess, height=1, bg="#404040", fg="white", activebackground="grey", activeforeground="white")
-    ConfirmMK.place(x=5, y=80)
-
-    def stop():
-        keyboard.unhook_all_hotkeys()
-
-    stopButton = Button(Multikey, text="Stop", command=stop,height=1, bg="#404040", fg="white", activebackground="grey", activeforeground="white")
-    stopButton.place(x=65, y=80)
 
 def mouseFun():
-    Mouse = Frame(window,bg="#404040", width=320, height=130, padx=10, pady=10, highlightthickness=3, highlightbackground="grey", relief="solid")
-    Mouse.place(x=140 , y=10)
-
-    MouseR = StringVar(master=Mouse)
-    MouseR.set("left")
-
-    MouseRadioLabel = Label(Mouse, text="Choose Mouse Button:", font=("Segoe UI", 10, "underline"),fg="white", bg="#404040")
-    MouseRadioLeft = Radiobutton(Mouse, variable=MouseR, value="left",bg="#404040", activeforeground="grey", activebackground="#404040")
-    MouseRadioRight = Radiobutton(Mouse, variable=MouseR, value="right",bg="#404040", activeforeground="grey", activebackground="#404040")
-    MouseRadioLeftLabel = Label(Mouse,text="Left", fg="white", font=("Segoe UI", 10),bg="#404040")    
-    MouseRadioRightLabel = Label(Mouse,text="Right", fg="white", font=("Segoe UI", 10),bg="#404040")
-    MouseRadioLeftLabel.place(x=170,y=2)
-    MouseRadioRightLabel.place(x=220,y=2)
-    MouseRadioLabel.place(x=5, y=2)
-    MouseRadioLeft.place(x=150, y=2)
-    MouseRadioRight.place(x=200, y=2,)
-
-    # Delay
-    MouseDelayLabel = Label(Mouse, text="Enter Delay (in milliseconds):", font=("Segoe UI", 10, "underline"), fg="white", bg="#404040")
-    MouseDelayEntry = Entry(Mouse ,bg="grey", fg="white", font=("Segoe UI", 10), width=8)
-    MouseDelayLabel.place(x=5, y=30)
-    MouseDelayEntry.place(x=180, y=30)
-
-    # Activation/Deactivation Key
-    ADKeyLabel = Label(Mouse, text="Enter key for Activation/Deactivation:", font=("Segoe UI", 10, "underline"), fg="white", bg="#404040")
-    ADKeyEntry = Entry(Mouse, bg="grey", fg="white", font=("Segoe UI", 10), width=8)
-    ADKeyLabel.place(x=5, y=60)
-    ADKeyEntry.place(x=225, y=60)
-    # messy
-    def MouseProcess():
-        global status
-        status = False
-        def onoff():
-                global status
-                status = not bool(status)  # Toggle
-                print("On" if status else "Off")
-
-        def Event():
-            if status:
-                mouse.click(MouseR.get())
-                Mouse.after(int(MouseDelayEntry.get()), Event)
-
-            elif status != True:
-                Mouse.after(int(MouseDelayEntry.get()), Event)
-
-
-        Event()
-
-        keyboard.add_hotkey(ADKeyEntry.get(), onoff)
-
-    MouseButton = Button(Mouse, text="Confirm", command=MouseProcess, height=1, bg="#404040", fg="white", activebackground="grey", activeforeground="white")
-    MouseButton.place(x=5, y=85)
-
-    def unhook():
-        keyboard.unhook_all_hotkeys()
-        global status
-        status = False
-
-    StopButton = Button(Mouse, text="Stop", command=unhook, height=1, bg="#404040", fg="white", activebackground="grey", activeforeground="white")
-    StopButton.place(x=65 , y=85)
+    mouseFrame = FrameConstructor(False, "Mouse", False)
 
 window = Tk()
-window.title("Options")
+window.title("Autoclicker")
 window.geometry("470x150")
 window.configure(bg="black")
+window.resizable(False,False)
 window.attributes("-topmost",True)
 
-optionsFrame = Frame(window, bg="#404040",width=120, height=132, highlightthickness=3, highlightbackground="grey", relief="solid")
+optionsFrame = Frame(window, bg=BackgroundColour,width=120, height=132, highlightthickness=3, highlightbackground=EntryColour, relief="solid")
 optionsFrame.place(x=10, y=10)
 
 InitialOptions = StringVar()
@@ -200,17 +158,8 @@ InitialOptions.set("Single Key")
 
 singlekeyFun()
 
-OptionsRaidioButton1 = Radiobutton(optionsFrame, variable=InitialOptions, value="Single Key", font=("Segoe UI", 10), bg="#404040",activebackground="#404040", activeforeground="grey", command=singlekeyFun)
-OptionsRaidioButton2 = Radiobutton(optionsFrame, variable=InitialOptions, value="Multi Key",font=("Segoe UI", 10), bg="#404040",activebackground="#404040", activeforeground="grey", command=multikeyFun)
-OptionsRaidioButton3 = Radiobutton(optionsFrame, variable=InitialOptions, value="Mouse", font=("Segoe UI", 10), bg="#404040",activebackground="#404040", activeforeground="grey",command=mouseFun)
-OptionsRaidioButton1Label = Label(optionsFrame, text="Single Key", fg="white", font=("Segoe UI", 10),bg="#404040") 
-OptionsRaidioButton2Label = Label(optionsFrame, text="Multi Key", fg="white", font=("Segoe UI", 10),bg="#404040")
-OptionsRaidioButton3Label = Label(optionsFrame, text="Mouse", fg="white", font=("Segoe UI", 10),bg="#404040")
-OptionsRaidioButton1.place(x=5, y=10)
-OptionsRaidioButton2.place(x=5, y=50)
-OptionsRaidioButton3.place(x=5, y=90)
-OptionsRaidioButton1Label.place(x=25,y=10)
-OptionsRaidioButton2Label.place(x=25,y=50)
-OptionsRaidioButton3Label.place(x=25,y=90)
+Radiobutton(optionsFrame, variable=InitialOptions,text="Single Key", value="Single Key", font=("Segoe UI", 10), bg=BackgroundColour,activebackground=BackgroundColour,fg=ForegroundColour, activeforeground=EntryColour,selectcolor=EntryColour, command=singlekeyFun).place(x=5, y=10)
+Radiobutton(optionsFrame, variable=InitialOptions,text="MultiKey", value="Multi Key",font=("Segoe UI", 10), bg=BackgroundColour,activebackground=BackgroundColour, activeforeground=EntryColour,fg=ForegroundColour,selectcolor=EntryColour, command=multikeyFun).place(x=5, y=50)
+Radiobutton(optionsFrame, variable=InitialOptions,text="Mouse", value="Mouse", font=("Segoe UI", 10), bg=BackgroundColour,activebackground=BackgroundColour, activeforeground=EntryColour,fg=ForegroundColour,selectcolor=EntryColour,command=mouseFun).place(x=5, y=90)
 
 window.mainloop()
