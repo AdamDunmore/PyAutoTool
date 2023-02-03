@@ -1,20 +1,31 @@
-import PySimpleGUI as sg
+#Check Lists:
+#   --Mouse Hold Feature
+#   --Recordable Macros
+#   --Swapable Confirm and Stop Buttons
+#   --Error Feedback
+
 from tkinter import *
 import keyboard
 import mouse
+from PIL import ImageTk, Image
+
 
 EntryColour = "#181A21"
 BackgroundColour = "#303443"
 ForegroundColour = "#ffffff"
 BorderColour = "#414554"
 
+global running
+running = False
+
 def stop():
     keyboard.unhook_all_hotkeys()
     global repeat
     repeat = False
+    
 
 class Processes:
-    def __init__(self, delay, key, buttonKey,AE, Mode):       
+    def __init__(self, delay, key, buttonKey,AE, Mode):    
         self.delay = int(delay)
         self.actKey = key
         self.button = buttonKey
@@ -115,14 +126,41 @@ class FrameConstructor:
         #Confirm Choise
         Button(self.MyFrame, text="Confirm", command=self.start,height=1, bg=BackgroundColour, fg=ForegroundColour, activebackground=EntryColour, activeforeground=ForegroundColour).place(x=5, y=80)
         #Stop
-        Button(self.MyFrame, text="Stop", command=stop,height=1, bg=BackgroundColour, fg=ForegroundColour, activebackground=EntryColour, activeforeground=ForegroundColour).place(x=65, y=80)
-
+        Button(self.MyFrame, text="Stop", command=lambda: [stop(), self.stopRunning() ],height=1, bg=BackgroundColour, fg=ForegroundColour, activebackground=EntryColour, activeforeground=ForegroundColour).place(x=65, y=80)
+        #Status Icon
+        self.iconImageStopped = Image.open("img/statusStop.png")
+        self.iconImageGo = Image.open("img/statusGo.png")
+        self.iconImageGo = self.iconImageGo.resize((25,25), Image.LANCZOS)
+        self.iconImageStopped = self.iconImageStopped.resize((25,25), Image.LANCZOS)
         
+        global running
+        if running == True:
+            print("True")
+            self.iconImageTk = ImageTk.PhotoImage(self.iconImageGo)
+        
+        elif running == False:
+            self.iconImageTk = ImageTk.PhotoImage(self.iconImageStopped)
+            print("False")
+        
+        self.imageStatusLabel = Label(self.MyFrame,image=self.iconImageTk, bg=BackgroundColour)
+        self.imageStatusLabel.place(x=105,y=80)
+    
 
         if self.AutoEnter == True:
             # AutoEnter
             Checkbutton(self.MyFrame, text="AE",foreground=ForegroundColour,background=BackgroundColour,  variable=self.AE, selectcolor=EntryColour,activebackground=BackgroundColour,activeforeground=ForegroundColour,command=self.updateAE).place(x=250,y=80)
 
+
+
+    def updateRunning(self):
+        global running
+        if running == True:
+            self.iconImageTk = ImageTk.PhotoImage(self.iconImageGo)
+        
+        elif running == False:
+            self.iconImageTk = ImageTk.PhotoImage(self.iconImageStopped)
+
+        self.imageStatusLabel.configure(image=self.iconImageTk)
 
 
     def start(self):
@@ -133,7 +171,14 @@ class FrameConstructor:
             self.button = self.MouseR.get()
         self.Process = Processes(self.DelayEntry.get(), self.ADKeyEntry.get(), self.button, self.AE.get(),self.keyInputText)
         self.Process.addHotkey()
+        global running
+        running = True
+        self.updateRunning()
 
+    def stopRunning(self):
+        global running
+        running = False
+        self.updateRunning()
 
 def singlekeyFun():  
     singleKeyFrame = FrameConstructor(keyInput = True,keyInputText= "Key",AutoEnter= False)
@@ -162,5 +207,9 @@ singlekeyFun()
 Radiobutton(optionsFrame, variable=InitialOptions,text="Single Key", value="Single Key", font=("Segoe UI", 10), bg=BackgroundColour,activebackground=BackgroundColour,fg=ForegroundColour, activeforeground=EntryColour,selectcolor=EntryColour, command=singlekeyFun).place(x=5, y=10)
 Radiobutton(optionsFrame, variable=InitialOptions,text="MultiKey", value="Multi Key",font=("Segoe UI", 10), bg=BackgroundColour,activebackground=BackgroundColour, activeforeground=EntryColour,fg=ForegroundColour,selectcolor=EntryColour, command=multikeyFun).place(x=5, y=50)
 Radiobutton(optionsFrame, variable=InitialOptions,text="Mouse", value="Mouse", font=("Segoe UI", 10), bg=BackgroundColour,activebackground=BackgroundColour, activeforeground=EntryColour,fg=ForegroundColour,selectcolor=EntryColour,command=mouseFun).place(x=5, y=90)
+
+
+
+
 
 window.mainloop()
