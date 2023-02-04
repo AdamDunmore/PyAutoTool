@@ -1,8 +1,9 @@
 #Check Lists:
 #   --Mouse Hold Feature
 #   --Recordable Macros
-#   --Error Feedback
+#   --Error Feedback(In Progress)
 #   --Dropdown keys/(maybe)mouse
+#   --Create key dict
 
 from tkinter import *
 import keyboard
@@ -122,6 +123,10 @@ class FrameConstructor:
             Radiobutton(self.MyFrame, variable=self.MouseR,text="Left", value="left",bg=BackgroundColour, activeforeground=EntryColour, activebackground=BackgroundColour,selectcolor=EntryColour, fg=ForegroundColour).place(x=5, y=2)
             Radiobutton(self.MyFrame, variable=self.MouseR,text="Right", value="right",bg=BackgroundColour, activeforeground=EntryColour, activebackground=BackgroundColour,selectcolor=EntryColour, fg=ForegroundColour).place(x=55, y=2,)
 
+        #Error Label
+        self.ErrorLabel = Label(self.MyFrame, text="", bg=BackgroundColour, fg=ForegroundColour, font=("Segoe UI", 10))
+        self.ErrorLabel.place(x=100,y=80)
+
 
         #Confirm Choise
         self.Confirm = Button(self.MyFrame, text="Confirm", command=self.start,height=1, bg=BackgroundColour, fg=ForegroundColour, activebackground=EntryColour, activeforeground=ForegroundColour)
@@ -167,6 +172,14 @@ class FrameConstructor:
 
 
     def start(self):
+
+        if str(self.DelayEntry.get()).isdigit() != True:
+            #Tell user to use an int
+            self.ErrorLabel.configure(text="You must use a whole number")
+ 
+ 
+
+
         if self.keyInput == True:
             self.button = self.KeyChoiseEntry.get()
 
@@ -177,6 +190,9 @@ class FrameConstructor:
         global running
         running = True
         self.updateRunning()
+
+        #Removes error message
+        self.ErrorLabel.configure(text="")
 
         #Toggles Confirm/Stop Button
         self.Stop.place(x=5, y=80)
