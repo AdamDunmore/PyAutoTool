@@ -1,8 +1,6 @@
 #Check Lists:
-#   --Mouse Hold Feature
 #   --Recordable Macros
 #   --Themes
-#   --Move error messages
 
 from tkinter import *
 import keyboard
@@ -168,8 +166,8 @@ class FrameConstructor:
 
 
         #Error Label
-        self.ErrorLabel = Label(self.MyFrame, text="", bg=BackgroundColour, fg=ForegroundColour, font=("Segoe UI", 7),width=20, height=1)
-        self.ErrorLabel.place(x=90,y=70)
+        self.ErrorLabel = Label(errorFrame, text="", bg=BackgroundColour, fg=ForegroundColour, font=("Segoe UI", 10))
+        self.ErrorLabel.place(x=5,y=5)
 
 
         #Confirm Choise
@@ -290,13 +288,16 @@ def mouseFun():
 
 window = Tk()
 window.title("Autoclicker")
-window.geometry("470x150")
+window.geometry("470x200")
 window.configure(bg="#525665")
 window.resizable(False,False)
 window.attributes("-topmost",True)
 
 optionsFrame = Frame(window, bg=BackgroundColour,width=120, height=132, highlightthickness=3, highlightbackground=BorderColour, relief="solid")
 optionsFrame.place(x=10, y=10)
+
+errorFrame = Frame(window,bg=BackgroundColour,width=450, height=40, highlightthickness=3, highlightbackground=BorderColour, relief="solid")
+errorFrame.place(x=10, y=150)
 
 InitialOptions = StringVar()
 InitialOptions.set("Single Key")
