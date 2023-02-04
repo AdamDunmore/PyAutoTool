@@ -2,7 +2,7 @@
 #   --Mouse Hold Feature
 #   --Recordable Macros
 #   --Error Feedback(In Progress)
-#   --Dropdown keys/(maybe)mouse
+#   --Dropdown keysstill not sure)/(maybe)mouse
 #   --Create key dict
 
 from tkinter import *
@@ -90,6 +90,15 @@ class FrameConstructor:
         self.MouseR.set("left")
         self.StopConfirmToggle = True
 
+        self.keys = [
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+        '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+',
+        '[', '{', ']', '}', '\\', '|', ';', ':', '\'', '\"', ',', '<', '.', '>', '/', '?',
+        '`', '~'
+        ]
+
         #Construct Frame
         self.MyFrame = Frame(window, bg=BackgroundColour,width=320, height=132, padx=10, pady=10, highlightthickness=3, highlightbackground=BorderColour, relief="solid")
         self.MyFrame.place(x=140, y=10)
@@ -110,12 +119,21 @@ class FrameConstructor:
             self.KeyChoiseLabel = Label(self.MyFrame,font=("Segoe UI",10,"underline"), bg=BackgroundColour,fg=ForegroundColour)
             if self.keyInputText == "Key":
                 self.KeyChoiseLabel.configure(text="Enter Key:")
+                dropdownOption = StringVar()
+                dropdownOption.set("a")
+                self.KeyChoiceDropDown = OptionMenu(self.MyFrame, dropdownOption,"a" ,*self.keys)
+                self.KeyChoiceDropDown.configure(direction="below",bg=BackgroundColour,fg=ForegroundColour,highlightbackground =BorderColour,activebackground=BackgroundColour, activeforeground=ForegroundColour,wraplength=10)
+                self.KeyChoiceDropDown.place(x=75,y=2)
+
             
             elif self.keyInputText == "Keys":
                 self.KeyChoiseLabel.configure(text="Enter Keys:")
-            self.KeyChoiseEntry = Entry(self.MyFrame,font=("Segoe UI",10), bg=EntryColour,fg=ForegroundColour,width=7,highlightcolor=BorderColour)  
+                self.KeyChoiseEntry = Entry(self.MyFrame,font=("Segoe UI",10), bg=EntryColour,fg=ForegroundColour,width=7,highlightcolor=BorderColour)  
+                self.KeyChoiseEntry.place(x=75,y=2)
+            
             self.KeyChoiseLabel.place(x=5,y=2)
-            self.KeyChoiseEntry.place(x=75,y=2) 
+
+             
 
 
         elif self.keyInput == False:
