@@ -1,8 +1,8 @@
 #Check Lists:
 #   --Mouse Hold Feature
 #   --Recordable Macros
-#   --Swapable Confirm and Stop Buttons
 #   --Error Feedback
+#   --Dropdown keys/(maybe)mouse
 
 from tkinter import *
 import keyboard
@@ -76,7 +76,6 @@ class Processes:
             self.Mouse_Event()
 
 class FrameConstructor:
-
     def updateAE(self):    
             self.AEState = self.AE.get()
             print(self.AEState)
@@ -88,6 +87,7 @@ class FrameConstructor:
         self.AE = IntVar()
         self.MouseR = StringVar()
         self.MouseR.set("left")
+        self.StopConfirmToggle = True
 
         #Construct Frame
         self.MyFrame = Frame(window, bg=BackgroundColour,width=320, height=132, padx=10, pady=10, highlightthickness=3, highlightbackground=BorderColour, relief="solid")
@@ -124,26 +124,29 @@ class FrameConstructor:
 
 
         #Confirm Choise
-        Button(self.MyFrame, text="Confirm", command=self.start,height=1, bg=BackgroundColour, fg=ForegroundColour, activebackground=EntryColour, activeforeground=ForegroundColour).place(x=5, y=80)
+        self.Confirm = Button(self.MyFrame, text="Confirm", command=self.start,height=1, bg=BackgroundColour, fg=ForegroundColour, activebackground=EntryColour, activeforeground=ForegroundColour)
+        if running == False:
+            self.Confirm.place(x=5, y=80)
+        
         #Stop
-        Button(self.MyFrame, text="Stop", command=lambda: [stop(), self.stopRunning() ],height=1, bg=BackgroundColour, fg=ForegroundColour, activebackground=EntryColour, activeforeground=ForegroundColour).place(x=65, y=80)
+        self.Stop = Button(self.MyFrame, text="Stop", command=lambda: [stop(), self.stopRunning() ],height=1, bg=BackgroundColour, fg=ForegroundColour, activebackground=EntryColour, activeforeground=ForegroundColour)
+        if running == True:
+            self.Stop.place(x=5, y=80)
+       
         #Status Icon
         self.iconImageStopped = Image.open("img/statusStop.png")
         self.iconImageGo = Image.open("img/statusGo.png")
         self.iconImageGo = self.iconImageGo.resize((25,25), Image.LANCZOS)
         self.iconImageStopped = self.iconImageStopped.resize((25,25), Image.LANCZOS)
         
-        global running
         if running == True:
-            print("True")
             self.iconImageTk = ImageTk.PhotoImage(self.iconImageGo)
         
         elif running == False:
             self.iconImageTk = ImageTk.PhotoImage(self.iconImageStopped)
-            print("False")
         
         self.imageStatusLabel = Label(self.MyFrame,image=self.iconImageTk, bg=BackgroundColour)
-        self.imageStatusLabel.place(x=105,y=80)
+        self.imageStatusLabel.place(x=65,y=80)
     
 
         if self.AutoEnter == True:
@@ -175,10 +178,17 @@ class FrameConstructor:
         running = True
         self.updateRunning()
 
+        #Toggles Confirm/Stop Button
+        self.Stop.place(x=5, y=80)
+        self.Confirm.place_forget()
+
+
     def stopRunning(self):
         global running
         running = False
         self.updateRunning()
+        self.Confirm.place(x=5, y=80)
+        self.Stop.place_forget()
 
 def singlekeyFun():  
     singleKeyFrame = FrameConstructor(keyInput = True,keyInputText= "Key",AutoEnter= False)
