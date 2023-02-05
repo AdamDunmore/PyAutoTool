@@ -1,8 +1,7 @@
 #Check Lists:
 #   --Recordable Macros
 #   --Themes
-#   --Change title bar
-#   --Add settings page
+#   --Add memory
 
 from tkinter import *
 import keyboard
@@ -292,26 +291,72 @@ window.configure(bg="#525665")
 window.resizable(False,False)
 window.attributes("-topmost",True)
 
+#Title Label
+AutoToolLabel = Label(window,text="PyAutoTool", width=40, height=1,bg=BackgroundColour,fg=ForegroundColour, font=(uiFont, 14),highlightbackground=BorderColour, highlightthickness=3)
+AutoToolLabel.place(x=8,y=5)
 
 
-#Creates title bar
-window.overrideredirect(True)
+global SettingsStatus
+SettingsStatus = 0
+def openSettings():
+    global SettingsStatus
+    if SettingsStatus == 0:
+        Settings.place(x=10,y=45)
+        Settings.tkraise() 
+        SettingsStatus = 1 
+    else:
+        Settings.place_forget()
+        SettingsStatus = 0
 
-def move_window(event):
-    window.geometry(f"+{event.x_root}+{event.y_root}")
+settingsIcon = Image.open("img/settings.png")
+settingsIcon = settingsIcon.resize((25,25),Image.LANCZOS)
+settingsIcon = ImageTk.PhotoImage(settingsIcon)
+
+Settings = Frame(window,bg=BackgroundColour,width=450,height=132,highlightthickness=3,highlightbackground=BorderColour,relief="solid")
+
+global titleBarStatus
+titleBarStatus = False
+
+def ToggleCustomTitleBar():
+    global titleBarStatus
+    global titleBar
+    print(titleBarStatus)
+    if titleBarStatus == False:
+        def move_window(event):
+            window.geometry(f"+{event.x_root}+{event.y_root}")
+        #Creates title bar
+        window.overrideredirect(True)
+        global titleBar
+        titleBar = Frame(window,width=470,bg=BackgroundColour)
+        titleBar.bind("<B1-Motion>",move_window)
+        titleLabel = Label(titleBar, text="AutoClicker",bg=BackgroundColour,fg=ForegroundColour,height=1).pack(anchor="center", pady=5)
+        titleBarClose = Button(titleBar,text="X",command=lambda:window.destroy(),bg=BackgroundColour,fg=ForegroundColour,activebackground=BackgroundColour,border=0,height=1).place(x=445,y=5)
+        titleBar.pack(expand=1, fill=X,anchor=N)
+        AutoToolLabel.place_forget()
+        ToggleCustomTitleBarButton.configure(text="On")
+
+        titleBarStatus = True
+
+    else:
+        ToggleCustomTitleBarButton.configure(text="Off")
+        titleBar.destroy()
+        window.overrideredirect(False)
+
+        titleBarStatus = False
 
 
-titleBar = Frame(window,width=470,bg=BackgroundColour)
-titleBar.bind("<B1-Motion>",move_window)
-titleLabel = Label(titleBar, text="AutoClicker",bg=BackgroundColour,fg=ForegroundColour,height=1).pack(anchor="center", pady=5)
-titleBarClose = Button(titleBar,text="X",command=lambda:window.destroy(),bg=BackgroundColour,fg=ForegroundColour,activebackground=BackgroundColour,border=0,height=1).place(x=445,y=5)
-titleBar.pack(expand=1, fill=X,anchor=N)
+ToggleCustomTitleBarLabel = Label(Settings, text="Custom Titlebar(Janky):",bg=BackgroundColour,fg=ForegroundColour,font=(uiFont,12)).place(x=5,y=5)
+ToggleCustomTitleBarButton = Button(Settings, text="Off", bg=BackgroundColour, fg=ForegroundColour, font=(uiFont, 10),command=ToggleCustomTitleBar)
+ToggleCustomTitleBarButton.place(x=230, y=5)
 
 optionsFrame = Frame(window, bg=BackgroundColour,width=120, height=132, highlightthickness=3, highlightbackground=BorderColour, relief="solid")
 optionsFrame.place(x=10, y=45)
 
 errorFrame = Frame(window,bg=BackgroundColour,width=450, height=40, highlightthickness=3, highlightbackground=BorderColour, relief="solid")
 errorFrame.place(x=10, y=185)
+
+settingsButton = Button(errorFrame,image=settingsIcon,bg=BackgroundColour,activebackground=BackgroundColour, borderwidth=0 ,command=openSettings)
+settingsButton.place(x=415,y=3)
 
 InitialOptions = StringVar()
 InitialOptions.set("Single Key")
