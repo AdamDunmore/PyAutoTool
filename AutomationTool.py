@@ -1,17 +1,19 @@
 #Check Lists:
 #   --Recordable Macros
 #   --Themes
+#   --Change title bar
+#   --Add settings page
 
 from tkinter import *
 import keyboard
 import mouse
 from PIL import ImageTk, Image
 
-
 EntryColour = "#181A21"
 BackgroundColour = "#303443"
 ForegroundColour = "#ffffff"
 BorderColour = "#414554"
+uiFont = "Segoe UI"
 
 global running
 running = False
@@ -89,8 +91,8 @@ class FrameConstructor:
 
     def ToggleMouseHoldTime(self):
         if self.HoldMouse.get() == 1:
-            self.HoldMouseLabel.place(x=80,y=60)
-            self.HoldMouseLength.place(x=230,y=60)
+            self.HoldMouseLabel.place(x=130,y=32)
+            self.HoldMouseLength.place(x=205,y=32)
 
         elif self.HoldMouse.get() == 0:
             self.HoldMouseLength.place_forget()
@@ -121,23 +123,23 @@ class FrameConstructor:
 
         #Construct Frame
         self.MyFrame = Frame(window, bg=BackgroundColour,width=320, height=132, padx=10, pady=10, highlightthickness=3, highlightbackground=BorderColour, relief="solid")
-        self.MyFrame.place(x=140, y=10)
+        self.MyFrame.place(x=140, y=45)
 
         # Delay
-        Label(self.MyFrame, text="Enter Delay (in milliseconds):",fg=ForegroundColour,font=("Segoe UI", 10,"underline"),bg=BackgroundColour).place(x=5,y=32)
-        self.DelayEntry = Entry(self.MyFrame,fg=ForegroundColour,font=("Segoe UI", 10),bg=EntryColour,width=16,highlightcolor=BorderColour)
-        self.DelayEntry.place(x=178, y=32)
+        Label(self.MyFrame, text="Enter Delay:",fg=ForegroundColour,font=(uiFont, 10,"underline"),bg=BackgroundColour).place(x=5,y=32)
+        self.DelayEntry = Entry(self.MyFrame,fg=ForegroundColour,font=(uiFont, 10),bg=EntryColour,width=6,highlightcolor=BorderColour)
+        self.DelayEntry.place(x=80, y=32)
 
 
         # Activation/Deactivation Key
-        Label(self.MyFrame, text="Enter Toggle Key:", font=("Segoe UI", 10,"underline"),fg=ForegroundColour,bg=BackgroundColour).place(x=130, y=2)
-        self.ADKeyEntry = Entry(self.MyFrame, font=("Segoe UI", 10),fg=ForegroundColour, bg=EntryColour,width=7,highlightcolor=BorderColour)
+        Label(self.MyFrame, text="Enter Toggle Key:", font=(uiFont, 10,"underline"),fg=ForegroundColour,bg=BackgroundColour).place(x=130, y=2)
+        self.ADKeyEntry = Entry(self.MyFrame, font=(uiFont, 10),fg=ForegroundColour, bg=EntryColour,width=7,highlightcolor=BorderColour)
         self.ADKeyEntry.place(x=240,y=2)
 
         #Key Entry
         if self.keyInput == True:
-            self.KeyChoiseLabel = Label(self.MyFrame,font=("Segoe UI",10,"underline"), bg=BackgroundColour,fg=ForegroundColour)
-            self.KeyChoiseEntry = Entry(self.MyFrame,font=("Segoe UI",10), bg=EntryColour,fg=ForegroundColour,width=7,highlightcolor=BorderColour)  
+            self.KeyChoiseLabel = Label(self.MyFrame,font=(uiFont,10,"underline"), bg=BackgroundColour,fg=ForegroundColour)
+            self.KeyChoiseEntry = Entry(self.MyFrame,font=(uiFont,10), bg=EntryColour,fg=ForegroundColour,width=7,highlightcolor=BorderColour)  
             if self.keyInputText == "Key":
                 self.KeyChoiseLabel.configure(text="Enter key:")
             
@@ -147,16 +149,13 @@ class FrameConstructor:
             self.KeyChoiseEntry.place(x=75,y=2)
             self.KeyChoiseLabel.place(x=5,y=2)
 
-             
-
-
         elif self.keyInput == False:
             #Mouse Buttons
             Radiobutton(self.MyFrame, variable=self.MouseR,text="Left", value="left",bg=BackgroundColour, activeforeground=EntryColour, activebackground=BackgroundColour,selectcolor=EntryColour, fg=ForegroundColour).place(x=5, y=2)
             Radiobutton(self.MyFrame, variable=self.MouseR,text="Right", value="right",bg=BackgroundColour, activeforeground=EntryColour, activebackground=BackgroundColour,selectcolor=EntryColour, fg=ForegroundColour).place(x=55, y=2,)
 
-            self.HoldMouseLabel = Label(self.MyFrame, text="Hold Time milliseconds:", bg=BackgroundColour, fg=ForegroundColour,font=("Segoe UI", 10,"underline"))
-            self.HoldMouseLength = Entry(self.MyFrame, bg=EntryColour, fg=ForegroundColour,width=10)
+            self.HoldMouseLabel = Label(self.MyFrame, text="Hold Time:", bg=BackgroundColour, fg=ForegroundColour,font=(uiFont, 10,"underline"))
+            self.HoldMouseLength = Entry(self.MyFrame, bg=EntryColour, fg=ForegroundColour,width=14)
 
             self.HoldMouse = IntVar()
             self.HoldMouseButton=Checkbutton(self.MyFrame,  text="Hold",foreground=ForegroundColour,background=BackgroundColour,  variable=self.HoldMouse, selectcolor=EntryColour,activebackground=BackgroundColour,activeforeground=ForegroundColour,command=self.ToggleMouseHoldTime)
@@ -166,7 +165,7 @@ class FrameConstructor:
 
 
         #Error Label
-        self.ErrorLabel = Label(errorFrame, text="", bg=BackgroundColour, fg=ForegroundColour, font=("Segoe UI", 10))
+        self.ErrorLabel = Label(errorFrame, text="Remember: All units are in milliseconds. eg: 1000 = 1 second", bg=BackgroundColour, fg=ForegroundColour, font=(uiFont, 10))
         self.ErrorLabel.place(x=5,y=5)
 
 
@@ -263,7 +262,7 @@ class FrameConstructor:
             self.updateRunning()
 
             #Removes error message
-            self.ErrorLabel.configure(text="")
+            self.ErrorLabel.configure(text="Remember: All units are in milliseconds. eg: 1000 = 1 second")
 
             #Toggles Confirm/Stop Button
             self.Stop.place(x=5, y=80)
@@ -277,7 +276,7 @@ class FrameConstructor:
         self.Confirm.place(x=5, y=80)
         self.Stop.place_forget()
 
-def singlekeyFun():  
+def singlekeyFun():
     singleKeyFrame = FrameConstructor(keyInput = True,keyInputText= "Key",AutoEnter= False)
     
 def multikeyFun():
@@ -288,24 +287,39 @@ def mouseFun():
 
 window = Tk()
 window.title("Autoclicker")
-window.geometry("470x200")
+window.geometry("470x230+0+0")
 window.configure(bg="#525665")
 window.resizable(False,False)
 window.attributes("-topmost",True)
 
+
+
+#Creates title bar
+window.overrideredirect(True)
+
+def move_window(event):
+    window.geometry(f"+{event.x_root}+{event.y_root}")
+
+
+titleBar = Frame(window,width=470,bg=BackgroundColour)
+titleBar.bind("<B1-Motion>",move_window)
+titleLabel = Label(titleBar, text="AutoClicker",bg=BackgroundColour,fg=ForegroundColour,height=1).pack(anchor="center", pady=5)
+titleBarClose = Button(titleBar,text="X",command=lambda:window.destroy(),bg=BackgroundColour,fg=ForegroundColour,activebackground=BackgroundColour,border=0,height=1).place(x=445,y=5)
+titleBar.pack(expand=1, fill=X,anchor=N)
+
 optionsFrame = Frame(window, bg=BackgroundColour,width=120, height=132, highlightthickness=3, highlightbackground=BorderColour, relief="solid")
-optionsFrame.place(x=10, y=10)
+optionsFrame.place(x=10, y=45)
 
 errorFrame = Frame(window,bg=BackgroundColour,width=450, height=40, highlightthickness=3, highlightbackground=BorderColour, relief="solid")
-errorFrame.place(x=10, y=150)
+errorFrame.place(x=10, y=185)
 
 InitialOptions = StringVar()
 InitialOptions.set("Single Key")
 
 singlekeyFun()
 
-Radiobutton(optionsFrame, variable=InitialOptions,text="Single Key", value="Single Key", font=("Segoe UI", 10), bg=BackgroundColour,activebackground=BackgroundColour,fg=ForegroundColour, activeforeground=EntryColour,selectcolor=EntryColour, command=singlekeyFun).place(x=5, y=10)
-Radiobutton(optionsFrame, variable=InitialOptions,text="MultiKey", value="Multi Key",font=("Segoe UI", 10), bg=BackgroundColour,activebackground=BackgroundColour, activeforeground=EntryColour,fg=ForegroundColour,selectcolor=EntryColour, command=multikeyFun).place(x=5, y=50)
-Radiobutton(optionsFrame, variable=InitialOptions,text="Mouse", value="Mouse", font=("Segoe UI", 10), bg=BackgroundColour,activebackground=BackgroundColour, activeforeground=EntryColour,fg=ForegroundColour,selectcolor=EntryColour,command=mouseFun).place(x=5, y=90)
+Radiobutton(optionsFrame, variable=InitialOptions,text="Single Key", value="Single Key", font=(uiFont, 10), bg=BackgroundColour,activebackground=BackgroundColour,fg=ForegroundColour, activeforeground=EntryColour,selectcolor=EntryColour, command=singlekeyFun).place(x=5, y=10)
+Radiobutton(optionsFrame, variable=InitialOptions,text="MultiKey", value="Multi Key",font=(uiFont, 10), bg=BackgroundColour,activebackground=BackgroundColour, activeforeground=EntryColour,fg=ForegroundColour,selectcolor=EntryColour, command=multikeyFun).place(x=5, y=50)
+Radiobutton(optionsFrame, variable=InitialOptions,text="Mouse", value="Mouse", font=(uiFont, 10), bg=BackgroundColour,activebackground=BackgroundColour, activeforeground=EntryColour,fg=ForegroundColour,selectcolor=EntryColour,command=mouseFun).place(x=5, y=90)
 
 window.mainloop()
