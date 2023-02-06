@@ -7,6 +7,16 @@ from tkinter import *
 import keyboard
 import mouse
 from PIL import ImageTk, Image
+import os
+import json
+
+username = os.getlogin()
+LocalLowPath = f"C:/Users/{username}/AppData/LocalLow/PyAutoTool"
+
+if not os.path.exists(LocalLowPath):
+    os.mkdir(LocalLowPath)
+
+configSetup = open(f"{LocalLowPath}/config.json", "a")
 
 EntryColour = "#181A21"
 BackgroundColour = "#303443"
@@ -320,7 +330,6 @@ titleBarStatus = False
 def ToggleCustomTitleBar():
     global titleBarStatus
     global titleBar
-    print(titleBarStatus)
     if titleBarStatus == False:
         def move_window(event):
             window.geometry(f"+{event.x_root}+{event.y_root}")
