@@ -37,6 +37,17 @@ class App(Tk):
             self.overrideredirect(False)
             self.AutoToolLabel.place(x=8,y=5)
 
+    def firstTimeSetup(self):
+        defaultSettings = {
+            "titleBarStatus" : False,
+        }
+
+        # Serializing json
+        json_object = dumps(defaultSettings, indent=4)
+
+        with open(f"{self.LocalLowPath}/config.json", "w") as config:
+            config.write(json_object)
+
     def singlekeyFun(self):
             singleKeyFrame = FrameConstructor(keyInput = True,keyInputText= "Key",AutoEnter= False)
         
@@ -104,25 +115,14 @@ class App(Tk):
         self.username = getlogin()
         self.LocalLowPath = f"C:/Users/{self.username}/AppData/LocalLow/PyAutoTool"
 
-        firstTime = 0
+        #Checks if this is first time setup
+        firstTime = False
         if not os.path.exists(self.LocalLowPath):
-            os.mkdir(self.LocalLowPath)
-            firstTime = 1
-
-        configSetup = open(f"{self.LocalLowPath}/config.json", "a")
-
+            mkdir(self.LocalLowPath)
+            firstTime = True
         
-        #Config Statuses
-        self.settingsDict = {
-            "titleBarStatus" : False
-        }
-        
-        if firstTime == 1:
-            # Serializing json
-            json_object = dumps(self.settingsDict, indent=4)
-
-            with open(f"{self.LocalLowPath}/config.json", "w") as config:
-                config.write(json_object)
+        if firstTime == True:
+            self.firstTimeSetup()
         
         #Status Variables
         self.running = False
@@ -131,9 +131,9 @@ class App(Tk):
 
         #Creates Settings
         with open(f"{self.LocalLowPath}/config.json", "r") as config:
-            configDict = load(config)
+            self.configDict = load(config)
 
-        self.settingsDict["titleBarStatus"] = configDict["titleBarStatus"]
+        self.settingsDict = self.configDict
         
         #Lists
         self.keys = [
@@ -190,11 +190,7 @@ class App(Tk):
         Radiobutton(self.optionsFrame, variable=self.InitialOptions,text="Single Key", value="Single Key", font=(self.uiFont, 10), bg=self.BackgroundColour,activebackground=self.BackgroundColour,fg=self.ForegroundColour, activeforeground=self.EntryColour,selectcolor=self.EntryColour, command=self.singlekeyFun).place(x=5, y=10)
         Radiobutton(self.optionsFrame, variable=self.InitialOptions,text="MultiKey", value="Multi Key",font=(self.uiFont, 10), bg=self.BackgroundColour,activebackground=self.BackgroundColour, activeforeground=self.EntryColour,fg=self.ForegroundColour,selectcolor=self.EntryColour, command=self.multikeyFun).place(x=5, y=50)
         Radiobutton(self.optionsFrame, variable=self.InitialOptions,text="Mouse", value="Mouse", font=(self.uiFont, 10), bg=self.BackgroundColour,activebackground=self.BackgroundColour, activeforeground=self.EntryColour,fg=self.ForegroundColour,selectcolor=self.EntryColour,command=self.mouseFun).place(x=5, y=90)
-
-        
-
-        
-
+    
 class Processes:
     def __init__(self, delay, key, buttonKey,AE, Mode,Hold, HoldTime):    
         self.delay = int(delay)
