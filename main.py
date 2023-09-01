@@ -10,6 +10,7 @@ from PIL import ImageTk, Image
 from json import load, dumps
 import os
 from os import getlogin, mkdir
+import requests
 
 
 
@@ -47,6 +48,12 @@ class App(Tk):
 
         with open(f"{self.LocalLowPath}/config.json", "w") as config:
             config.write(json_object)
+
+        settings = requests.get("https://github.com/AdamDunmore/PyAutoTool/blob/master/img/settings.png?raw=true")
+        mkdir(self.LocalLowPath + "img")
+        open(self.LocalLowPath + 'img/settings.png', 'w').write(settings.content)
+
+        
 
     def singlekeyFun(self):
             singleKeyFrame = FrameConstructor(keyInput = True,keyInputText= "Key",AutoEnter= False)
