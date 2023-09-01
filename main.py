@@ -39,6 +39,7 @@ class App(Tk):
             self.AutoToolLabel.place(x=8,y=5)
 
     def firstTimeSetup(self):
+        loading = Tk() #Set this up as a module
         defaultSettings = {
             "titleBarStatus" : False,
         }
@@ -52,6 +53,7 @@ class App(Tk):
         settings = requests.get("https://github.com/AdamDunmore/PyAutoTool/blob/master/img/settings.png?raw=true")
         mkdir(self.LocalLowPath + "img")
         open(self.LocalLowPath + 'img/settings.png', 'w').write(settings.content)
+
 
         
 
