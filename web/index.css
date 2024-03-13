@@ -1,0 +1,141 @@
+:root{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    --background-colour: #303443;
+    --border-colour: #414554;
+
+    --text-colour: #ffffff;
+
+    --s-colour: #2A2C3B;
+    --s-colour-hover: #1A1C2B;
+    --t-colour: #181A21;
+    --t-colour-hover: #080A11;
+
+}
+
+html,body{
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+#main{
+    background-color: var(--background-colour);
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#nav_bar{
+    width: 100%;
+    height: 40px;
+    
+    display: flex;
+    flex-wrap: nowrap;
+
+    margin-bottom: 5px;
+}
+
+.nav_button{
+    background-color: var(--t-colour);
+    width: 100%;
+    border: none;
+
+    color: var(--text-colour);
+    font-size: 1rem;
+
+    transition: background-color 0.2s;
+}
+
+.nav_button:disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.nav_button:hover{
+    background-color: var(--t-colour-hover);
+}
+
+#content{
+    border-color: var(--t-colour);
+    border-width: 2px;
+    border-style: solid;
+
+    width: calc(100% - 30px);
+    height: calc(100% - 60px);
+
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.element{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.ele_title{
+    color: var(--text-colour);
+    text-align: center;
+}
+
+.ele_input{
+    border-radius: 10px;
+    border: none;
+
+    background-color: var(--t-colour);
+    color: var(--text-colour);
+
+    margin: 3px;
+    padding: 2px;
+
+    width: 80%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
+.mouse_radios{
+    color: var(--text-colour);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.start_button{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+
+    padding: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    border-radius: 20px;
+    border-width: 2px;
+    border-color: var(--border-colour);
+    border-style: solid;
+
+    font-size: 15px;
+
+    color: var(--text-colour);
+    background-color: var(--s-colour);
+
+    transition: background-color 0.2s;
+}
+
+.start_button:hover{
+    background-color: var(--s-colour-hover);
+}
